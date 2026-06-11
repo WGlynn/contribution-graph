@@ -1,28 +1,50 @@
-# Prior art: Deep Funding (EF) and Shapley credit attribution
+# Prior art: Deep Funding (Ethereum Foundation)
 
-[deepfunding.org](https://deepfunding.org) — Ethereum-Foundation-supported,
-Vitalik-seeded, applying Shapley-axiom credit attribution to the open-source
-dependency graph: given that project B depends on library A, how much of B's
-value/funding should flow to A, recursively, across the whole graph.
+[deepfunding.org](https://www.deepfunding.org) · [github.com/deepfunding](https://github.com/deepfunding) —
+Ethereum-Foundation-supported, Vitalik-seeded, applying Shapley-style credit
+attribution to Ethereum's open-source dependency graph.
 
-## What this repo takes from it
+> Disambiguation: this is **EF** Deep Funding, not the unrelated SingularityNET
+> program of a similar name. Default any "deep funding" reference to EF's.
 
-- **The graph is the source of truth.** Credit (there: funding; here: ownership)
-  derives from the observable dependency/contribution graph, not from petition.
-- **Recursion is the honest model.** Influence is transitive; A enables B enables
-  C, and a fair attribution decomposes back through the chain. See
-  `theory/01-influence-dag.md`.
-- **Shapley is the fairness anchor** even when you cannot afford to compute it
-  exactly — it tells you what a correct attribution *would* satisfy, so an
-  approximation can be judged against it.
+## The actual artifact (verified from the cloned repos)
+
+- **The graph:** a depth-2 directed dependency graph rooted at Ethereum — 31
+  seed (Level 1) nodes, 5,024 dependency (Level 2) nodes, 14,927 edges.
+- **The edge convention** (reused verbatim in `theory/foundation.md`): for an
+  edge `source → target` (source = dependent, target = dependency), the weight is
+  "the portion of the credit for `source` that belongs to `target`." Weights
+  leaving a node **sum to less than one**; the remainder is the credit retained
+  by the node itself. Example edge:
+  ```json
+  {"relation": "GOLANG", "weight": 0.1,
+   "source": ".../prysm", "target": ".../go-multihash"}
+  ```
+- **Two pillars** (Vitalik's framing): *value-as-graph* (per-achievement credit
+  attribution over the dependency graph) + *distilled human judgment* (an open
+  AI-model market estimates edge weights; a human jury spot-checks a sample; the
+  winning submission is the one most aligned with the jury).
+- **Single-layer vs multi-layer scoring** (`deepfunding-scoring` repo): compare
+  many contributors to one outcome, OR compare dependencies *and* dependencies of
+  dependencies — the recursion this repo's influence-DAG section mirrors.
+
+## What this repo takes
+
+- the graph-is-truth principle, the fractional-edge-weight convention, the
+  transitive-recursion model, Shapley as the fairness anchor, and — most
+  importantly — the **sample-and-distill** answer to unobservable edges (a jury
+  scores a sample, a model generalizes). See `theory/foundation.md`.
 
 ## Where this repo diverges
 
-Deep Funding solves a **distribution** problem (how should money flow through the
-graph). This repo solves an **assignment** problem (who should be routed to for
-review/triage). Same graph, same Shapley lineage, different question — and the
-assignment problem tolerates a cheaper, heuristic answer because the cost of a
-slightly-wrong DRI is a misrouted review, not a misallocated grant.
+Deep Funding solves **distribution** (how funding flows). This repo solves
+**assignment** (who gets routed to). Same graph, same lineage, different
+question — and assignment tolerates a cheaper heuristic because a misrouted
+reviewer costs a re-route, not a misallocated grant. They compose: a
+Deep-Funding distribution could pay out across the DRIs this repo assigns.
 
-The two compose: a deep-funding-style distribution could pay out *across* the
-DRIs this mechanism assigns.
+## Lineage note
+
+This is not arms-length prior art. The author worked in the Deep Funding line
+directly before this and adjacent work; the methodology continuity is direct,
+not coincidental.

@@ -7,6 +7,9 @@ self-nomination or politics.
 > Whoever has actually shipped reviewed work in an area is the default owner of
 > its triage lane. The assignment rule is auditable from git history, not vibes.
 
+
+> **Read `theory/foundation.md` first.** This repo stands on a shared substrate that EF Deep Funding and the Contribution Compact established; it adds the *assignment* question and its hardening, with credit.
+
 ## The one distinction that makes this tractable
 
 This is deliberately **not** a Shapley value computation. Shapley answers "how do
