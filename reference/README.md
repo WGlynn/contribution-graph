@@ -31,3 +31,7 @@ argmax weight per lane. Lanes default to top-level directories; override with
 
 The value of this file is that it *runs*, produces a sane table on real repos
 (tested at 3,000+ commits), and exposes the gaps the prose hid.
+
+## Next hardening (planned)
+
+- **Split credit across touched lanes** (`08-cross-lane-gaming`): divide each commit's weight by the number of lanes it touches, so a wide mechanical sweep cannot farm ownership of many lanes. One-line change to the accumulation step.
