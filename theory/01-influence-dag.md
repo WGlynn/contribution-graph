@@ -23,6 +23,13 @@ b's value flows partly back to its in-edges, and theirs to theirs. This is a
 Shapley value computed over the influence DAG rather than over a flat set — it
 captures inspiration and enabling chains that flat commit-counting cannot.
 
+> Footnote (precision): "Shapley over the DAG" is, named exactly, the **Myerson
+> value** — the Shapley value of the graph-restricted game, where only
+> coalitions connected in the graph create value (`v(S)` summed over the
+> connected components of `S`). Plain Shapley assumes any subset can form a
+> coalition; the Myerson value is the right primitive when value only flows along
+> the edges, which is precisely the influence-DAG case here.
+
 This is the north star. It is also, in full generality:
 - **expensive** (Shapley is exponential; the DAG is large),
 - **partly unobservable** (the "one review comment that changed everything" is
