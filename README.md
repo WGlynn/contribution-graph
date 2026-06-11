@@ -7,6 +7,16 @@ self-nomination or politics.
 > Whoever has actually shipped reviewed work in an area is the default owner of
 > its triage lane. The assignment rule is auditable from git history, not vibes.
 
+## The one distinction that makes this tractable
+
+This is deliberately **not** a Shapley value computation. Shapley answers "how do
+we fairly split a fixed surplus" — a *distribution* rule, O(2^n), needing a
+defined coalition value. This answers "who should be routed to" — an *assignment*
+rule, O(commits), needing only the contribution graph. They compose (Shapley can
+distribute a reward pool *across* the DRIs this assigns) but they solve different
+problems. Holding that line is what keeps the whole mechanism cheap and auditable.
+See `prior-art/shapley.md` and `theory/01-influence-dag.md`.
+
 ## Why this repo exists
 
 Open-source projects hit the same coordination wall: who decides what, who
