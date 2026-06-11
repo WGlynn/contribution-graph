@@ -17,6 +17,9 @@ the forge API (GitHub/GitLab review records), not in git. A merge commit is a
 proxy, not proof. The forge-API version is the upgrade; this git-only version is
 the cheap floor that still beats self-nomination. See theory/foundation.md.
 
+Identity: uses %aN/%aE so a repo .mailmap collapses aliases to a canonical
+name; as a fallback, distinct display names sharing one email are merged.
+
 Stdlib only. Usage:
   python dri.py [--repo PATH] [--half-life-days N] [--lane name=prefix ...]
 """
@@ -56,11 +59,12 @@ def main():
     now = time.time()
     halflife = max(1.0, args.half_life_days) * 86400.0
 
-    fmt = SENT + "%H" + FS + "%an" + FS + "%at" + FS + "%P" + FS + "%s"
+    fmt = SENT + "%H" + FS + "%aN" + FS + "%aE" + FS + "%at" + FS + "%P" + FS + "%s"
     log = git(args.repo, "log", "--pretty=format:" + fmt, "--name-only")
 
     weight = defaultdict(float)
     lane_authors = defaultdict(set)
+    email_to_name = {}
     commits = 0
     for block in log.split(SENT):
         block = block.strip("\n")
@@ -70,8 +74,12 @@ def main():
         parts = header.split(FS)
         if len(parts) < 4:
             continue
-        _h, author, at, parents = parts[0], parts[1], parts[2], parts[3]
-        subject = parts[4] if len(parts) > 4 else ""
+        _h, author, email, at, parents = parts[0], parts[1], parts[2], parts[3], parts[4]
+        subject = parts[5] if len(parts) > 5 else ""
+        # email auto-cluster fallback for aliases not in .mailmap: collapse
+        # distinct display names that share a verified email to one canonical.
+        canon = email_to_name.setdefault(email.lower(), author)
+        author = canon if email else author
         is_merge = len(parents.split()) > 1
         co_authored = "co-authored-by:" in (subject.lower() + filelist.lower())
         proxy = 1.0 if (is_merge or co_authored) else BARE_WEIGHT
