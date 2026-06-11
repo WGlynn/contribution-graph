@@ -10,8 +10,11 @@ as equals, and only then names the specific question this repo adds.
 
 1. **Value is a weighted directed credit-graph, not a flat tally.** Contribution
    is edges, not line counts. Deep Funding makes this concrete: a depth-2
-   dependency graph (31 seed nodes, 5,024 dependency nodes, 14,927 edges) rooted
-   at Ethereum.
+   dependency graph (34 seed / level-1 nodes, 4,990 dependency / level-2 nodes,
+   5,024 total nodes, 14,927 edges) rooted at Ethereum. (Counts are from the
+   actual graph data file; Deep Funding's README *headline* says "31 seeds /
+   5,024 deps," which disagrees with its own data — see `prior-art/deepfunding.md`
+   for the reconciliation.)
 
 2. **An edge weight is a *fraction of the downstream's credit*, and the
    remainder stays upstream's own.** Deep Funding's exact convention: for an edge
@@ -32,9 +35,12 @@ as equals, and only then names the specific question this repo adds.
 5. **Unobservable edges are recovered by distilling sampled human judgment.**
    This is Deep Funding's key move and the answer to a problem this repo had left
    open. The full graph is too large to label by hand; instead a human jury
-   scores a *sample* of edges, and an open market of AI models competes to
-   generalize the jury's preferences across the whole graph, with the submission
-   most aligned to the jury winning. My Contribution Compact reaches the same end
+   answers *pairwise* spot-checks ("has A or B been more valuable to Ethereum's
+   success?") on a sample, and an open market of AI models competes to generalize
+   those preferences across the whole graph, with submissions scoring higher the
+   more compatible they are with the jury's spot-checks. (Deep Funding publishes
+   the scoring code and the pairwise-jury framing; it does not publish a single
+   fixed loss formula, so this repo does not assert one.) My Contribution Compact reaches the same end
    by a different route — cross-rater agreement as the quality signal, plus a
    peer challenge-response window with bonded stake. Same problem, two valid
    distillations.
