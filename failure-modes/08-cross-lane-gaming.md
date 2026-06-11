@@ -18,9 +18,9 @@ once" as identical to "owns 20 lanes," when the first is almost always a sweep.
 - **A commit's credit is split across the lanes it touches, not replicated.** A
   commit touching one lane gives that lane full weight; a commit touching twenty
   lanes gives each a twentieth. Breadth is penalized exactly because genuine
-  ownership is concentrated and sweeps are diffuse. (Reference impl: change
-  `weight[(lane,a)] += dk*proxy` to divide by `len(touched)` — a one-line edit;
-  this is the next reference-impl hardening, noted in `reference/README.md`.)
+  ownership is concentrated and sweeps are diffuse. **Shipped** in
+  `reference/dri.py`: each commit's credit is multiplied by `1/len(touched)`, so a
+  one-lane commit keeps full weight and a twenty-lane sweep gives each a twentieth.
 - **The merge/review proxy already filters drive-bys.** A drive-by direct push
   scores `BARE_WEIGHT`; to plant real weight an attacker must get reviewed-and-
   merged into a lane they do not work in, which is the review wall doing its job.

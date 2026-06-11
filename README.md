@@ -47,11 +47,16 @@ commitment to any specific project's governance.
 
 ## Layout
 
-- `theory/` — the mechanism, its invariants, and the impossibility results it
-  navigates around
-- `failure-modes/` — adversarial analysis, one file per attack
-- `prior-art/` — Shapley value, quadratic funding, reputation systems, and where
-  this differs
+- `theory/` — the mechanism (`foundation`, `00-mechanism`, `01-influence-dag`),
+  the governance stance (`02-governance` — where judgment lives), and the
+  political economy it encodes (`03-cooperative-capitalism` — compete on the
+  surface, cooperate on the substrate)
+- `failure-modes/` — adversarial analysis, one file per attack (8 of them) plus
+  `THREAT-MODEL.md`, the attacker's-eye synthesis
+- `prior-art/` — Shapley value, EF Deep Funding, the Contribution Compact, and
+  where this differs (all fact-checked against source)
+- `reference/` — `dri.py`, a runnable stdlib-only floor that derives a DRI table
+  from any repo's git log
 
 ## License
 

@@ -16,8 +16,12 @@ while access stays bounded by subscription, so the ledgers are misaligned.
 - **Signal scope:** explicit RLHF feedback only (thumbs, regenerate, accept) —
   bounded, already-tracked.
 - **Attribution:** per-action weight from rarity (novelty) x quality
-  (cross-rater agreement) x freshness (recent signal favored). This is the same
-  graph-edge-weight idea as Deep Funding, applied to the user → model edge.
+  (cross-rater agreement) x freshness (recent signal favored), then aggregated by
+  a **streaming Shapley approximation over the logged contribution stream with
+  published error bounds** (not an exact Shapley computation at scale). This is the
+  same graph-edge-weight idea as Deep Funding, applied to the user → model edge,
+  and the same "Shapley as anchor, approximation in practice" stance this repo
+  takes for assignment.
 - **Settlement:** quarterly epochs, threshold-gated payout (credit / revenue
   share / equity); below-threshold incurs no penalty.
 - **Verification:** peer challenge-response with bonded stake, disputable in a

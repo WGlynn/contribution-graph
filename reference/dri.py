@@ -6,7 +6,11 @@ This is the TRACTABLE-APPROXIMATION tier from theory/foundation.md, made
 runnable. It uses only what `git log` exposes:
 
   weight(author, lane) = sum over commits c touching lane of
-        decay(age_days(c)) * review_proxy(c)
+        decay(age_days(c)) * review_proxy(c) / lanes_touched(c)
+
+  The / lanes_touched(c) term splits a commit's credit across the lanes it
+  touches (failure-modes/08-cross-lane-gaming): a wide mechanical sweep cannot
+  farm ownership of many lanes; concentrated work out-earns diffuse work.
 
   review_proxy(c) = 1.0 if c is a merge commit OR carries a Co-authored-by
                     trailer (proxies "went through review / collaboration"),
@@ -90,8 +94,13 @@ def main():
         dk = math.pow(0.5, age / halflife)
         touched = {lane_of(ln.strip(), lanes)
                    for ln in filelist.splitlines() if ln.strip()}
+        # split credit across the lanes a commit touches (failure-modes/08):
+        # a wide mechanical sweep across N lanes cannot farm ownership of all N.
+        # a focused commit (one lane) keeps full weight; a 20-lane sweep gives
+        # each lane a twentieth. concentrated work out-earns diffuse work.
+        share = (1.0 / len(touched)) if touched else 0.0
         for lane in touched:
-            weight[(lane, author)] += dk * proxy
+            weight[(lane, author)] += dk * proxy * share
             lane_authors[lane].add(author)
         commits += 1
 
